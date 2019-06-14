@@ -13,7 +13,7 @@
 ```
  * configuration in SonicWALL
    * goto System>Administration
-   * enable SonicOS API and basic authnetication (for now)
+   * enable SonicOS API and basic authentication (for now)
    * goto Users>Local Users
    * create read only admin
 

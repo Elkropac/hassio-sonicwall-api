@@ -54,9 +54,11 @@ class SonicwallDeviceScanner(DeviceScanner):
         if not success:
             raise ConnectionError("Cannot connect to Sonicwall failed")
 
-        status_string = "SonicWALL API; Connected to model '{model}'; serial number: '{serial_number}', firmware version: '{firmware_version}'".format(**self.system_info)
-        print(status_string)
-        _LOGGER.info(status_string)
+        #huh model not found?
+        #if model in self.system_info and serial_number in self.system_info and firmware_version in self.system_info:
+        #    status_string = "SonicWALL API; Connected to model '{model}'; serial number: '{serial_number}', firmware version: '{firmware_version}'".format(**self.system_info)
+        #    print(status_string)
+        #    _LOGGER.info(status_string)
 
     def scan_devices(self):
         """Scan for new devices and return a list with found device IDs."""

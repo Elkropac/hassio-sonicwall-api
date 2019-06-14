@@ -15,6 +15,7 @@
  * configuration in SonicWALL
    * goto System>Administration
    * enable SonicOS API and basic authentication (for now)
+   ![Screenshot](/docs/Screenshot_20190614_145938.png?raw=true)
    * goto Users>Local Users
    * create read only admin
 

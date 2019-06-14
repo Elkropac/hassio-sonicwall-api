@@ -1,0 +1,5 @@
+CONF_USERNAME_RO = 'username_ro'
+CONF_USERNAME_RW = 'username_rw'
+CONF_PASSWORD_RO = 'password_ro'
+CONF_PASSWORD_RW = 'password_rw'
+CONF_DEVICE_TRACKER_INTERFACES = 'device_tracker_interfaces'

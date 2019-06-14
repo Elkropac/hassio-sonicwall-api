@@ -1,5 +1,6 @@
 # hassio-sonicwall-api
  * tested on TZ-300W with firmware 6.5.3.3-3n
+ * not-so-complete documentation: https://sonicos-api.sonicwall.com/#/
  
  * configuration in hassio
  ```yaml

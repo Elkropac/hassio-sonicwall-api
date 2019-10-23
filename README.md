@@ -1,6 +1,6 @@
 # hassio-sonicwall-api
  * tested on TZ-300W with firmware 6.5.3.3-3n
- * not-so-complete documentation: https://sonicos-api.sonicwall.com/#/
+ * not-so-complete API documentation by Sonicwall: https://sonicos-api.sonicwall.com/#/
  
  * configuration in hassio
  ```yaml
@@ -19,4 +19,4 @@
    * goto Users>Local Users
    * create read only admin
 
-Note: there can be only one admin logged to SonicWALL, so hassio will probably log you out, when it connects to check for mac table, only user "admin" has higher priority
+Note: there can be only one admin logged to SonicWALL, so hassio will probably logout your user from browser, when it connects to check for mac table. Only user "admin" has higher priority.

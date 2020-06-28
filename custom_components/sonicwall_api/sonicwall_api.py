@@ -1,30 +1,29 @@
-from io import BytesIO
 import logging
 import simplejson as json
-import pycurl
+import requests
+from requests.auth import HTTPBasicAuth, HTTPDigestAuth
+from urllib3.exceptions import InsecureRequestWarning
+
+#debug
+import http.client as http_client
+http_client.HTTPConnection.debuglevel = 1
 
 class SonicWallApi:
     """Class for SonicwallAPI"""
 
-    _headers = ("Content-Type: application/json", "Accept: application/json")
+    _headers = {"Content-Type": "application/json", "Accept": "application/json", "Accept-Encoding": "application/json", "User-Agent": "requests/HA/sonicwall_api"}
+    _timeout = 5
 
     def __init__(self, base_url, username, password, verify_cert=False, login_override=False, login_method='basic'):
         """Initialize object"""
         self._base_url = base_url
+        self._verify = verify_cert
         self._username = username
         self._password = password
         self._login_override = login_override
         self._login_method = login_method
-
-
-        self._curl = pycurl.Curl()
-        self._curl.setopt(pycurl.USERAGENT, "pycurl/HA/sonicwall_api")
-        self._curl.setopt(pycurl.SSL_VERIFYPEER, verify_cert)
-        self._curl.setopt(pycurl.SSL_VERIFYHOST, verify_cert)
-        self._curl.setopt(pycurl.FORBID_REUSE, False)
-        self._curl.setopt(pycurl.HTTP_VERSION, pycurl.CURL_HTTP_VERSION_1_1)
-        self._curl.setopt(pycurl.CONNECTTIMEOUT, 5)
-        self._curl.setopt(pycurl.VERBOSE, 0)
+        if self._verify == False:
+            requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
     def login(self):
         post = {'override': self._login_override}
@@ -34,10 +33,10 @@ class SonicWallApi:
             post['id'] = response['id']
             post['user'] = self._username
             #post['digest'] = md5(hex2bin($req->id).$this->pass.hex2bin($req->challenge))
-        elif self._login_method == 'digest' or self._login_method == 'basic':
-            self._curl.setopt(pycurl.HTTPAUTH, pycurl.HTTPAUTH_DIGEST if (self._login_method == 'digest') else pycurl.HTTPAUTH_BASIC)
-            self._curl.setopt(pycurl.USERNAME, self._username)
-            self._curl.setopt(pycurl.PASSWORD, self._password)
+        elif self._login_method == 'basic':
+            self._auth = HTTPBasicAuth(self._username, self._password)
+        elif self._login_method == 'digest':
+            self._auth = HTTPDigestAuth(self._username, self._password)
         else:
             print("Unknown login method\n")
             exit(1)
@@ -51,49 +50,21 @@ class SonicWallApi:
         return self.post('/config/pending')
 
     def get(self, url):
-        return self.get_delete(url, 'GET')
+        r = requests.get(self._base_url + url, auth=self._auth, verify=self._verify, headers=self._headers, stream=False, timeout=self._timeout)
+        return r.json()
 
     def delete(self, url):
-        return self.get_delete(url, 'DELETE')
+        r = requests.delete(self._base_url + url, auth=self._auth, verify=self._verify, headers=self._headers, stream=False, timeout=self._timeout)
+        return r.json()
 
     def post(self, url, data={}):
-        return self.post_put_patch(url, data, 'POST')
+        r = requests.post(self._base_url + url, auth=self._auth, json=data, verify=self._verify, headers=self._headers, stream=False, timeout=self._timeout)
+        return r.json()
 
     def put(self, url, data={}):
-        return self.post_put_patch(url, data, 'PUT')
+        r = requests.put(self._base_url + url, auth=self._auth, json=data, verify=self._verify, headers=self._headers, stream=False, timeout=self._timeout)
+        return r.json()
 
     def patch(self, url, data={}):
-        return self.post_put_patch(url, data, 'PATCH')
-
-    def get_delete(self, url, http_method='GET'):
-        data = BytesIO()
-
-        self._curl.setopt(pycurl.WRITEFUNCTION, data.write)
-        self._curl.setopt(pycurl.CUSTOMREQUEST, http_method)
-        self._curl.setopt(pycurl.POSTFIELDS, '')
-        self._curl.setopt(pycurl.HTTPHEADER, self._headers)
-        self._curl.setopt(pycurl.URL, self._base_url + url)
-        response = self._curl.perform()
-
-        return json.loads(data.getvalue())
-
-    def post_put_patch(self, url, sendData={}, http_method='POST'):
-        data = BytesIO()
-        self._curl.setopt(pycurl.WRITEFUNCTION, data.write)
-        self._curl.setopt(pycurl.CUSTOMREQUEST, http_method)
-
-        headers = list(self._headers)
-        if len(sendData) > 0:
-            send = json.dumps(sendData)+"\r\n"
-            self._curl.setopt(pycurl.POSTFIELDS, send)
-            headers.append("Content-Length: %d" % len(send))
-        else:
-            self._curl.setopt(pycurl.POSTFIELDS, '')
-            headers.append("Content-Length: 0")
-
-        self._curl.setopt(pycurl.HTTPHEADER, headers)
-        self._curl.setopt(pycurl.URL, self._base_url + url)
-
-        response = self._curl.perform()
-
-        return json.loads(data.getvalue())
+        r = requests.patch(self._base_url + url, auth=self._auth, json=data, verify=self._verify, headers=self._headers, stream=False, timeout=self._timeout)
+        return r.json()

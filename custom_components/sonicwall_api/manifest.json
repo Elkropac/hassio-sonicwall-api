@@ -2,7 +2,7 @@
   "domain": "sonicwall_api",
   "name": "Sonicwall",
   "documentation": "https://www.home-assistant.io/components/unifi_direct",
-  "requirements": ["simplejson==3.16.0", "pycurl==7.43.0.2"],
+  "requirements": ["requests==2.24.0"],
   "dependencies": [],
   "codeowners": []
 }

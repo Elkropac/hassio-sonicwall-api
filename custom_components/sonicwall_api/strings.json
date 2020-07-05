@@ -1,0 +1,28 @@
+{
+  "title": "SonicWall API",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up connection",
+        "data": {
+          "url": "Host",
+          "username_rw": "User name",
+          "password_rw": "Password",
+          "username_ro": "User name",
+          "password_ro": "Password",
+          "login_method": "Login method",
+          "login_override": "Login override",
+          "verify_ssl": "Controller using proper certificate"
+        }
+      }
+    },
+    "error": {
+      "faulty_credentials": "Bad user credentials",
+      "service_unavailable": "No service available"
+    },
+    "abort": {
+      "already_configured": "Controller site is already configured",
+      "user_privilege": "User needs to be administrator"
+    }
+  }
+}

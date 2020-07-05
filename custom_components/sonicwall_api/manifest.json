@@ -1,8 +1,9 @@
 {
   "domain": "sonicwall_api",
   "name": "Sonicwall",
+  "config_flow": true,
   "documentation": "https://www.home-assistant.io/components/unifi_direct",
-  "requirements": ["requests==2.24.0"],
+  "requirements": [],
   "dependencies": [],
   "codeowners": []
 }

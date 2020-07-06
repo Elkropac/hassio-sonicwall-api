@@ -29,9 +29,9 @@ async def async_setup_entry(hass, config_entry):
         return False
 
     hass.data[DOMAIN][config_entry.entry_id] = api
+    #print(hass.data[DOMAIN])
 
-    #hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, controller.shutdown)
-
+    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, api.shutdown)
     LOGGER.debug("SonicWallApi config options %s", config_entry.options)
 
     device_registry = await hass.helpers.device_registry.async_get_registry()
@@ -41,7 +41,7 @@ async def async_setup_entry(hass, config_entry):
         manufacturer=ATTR_MANUFACTURER,
         model=api.model,
         name=ATTR_MANUFACTURER+" "+api.model+" "+api.serial_number,
-        # sw_version=config.raw['swversion'],
+        sw_version=api.firmware_version,
     )
 
     return True

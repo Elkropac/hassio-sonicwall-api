@@ -44,11 +44,13 @@ class SonicwallConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_VERIFY_SSL: user_input.get(CONF_VERIFY_SSL),
                 CONF_LOGIN_METHOD: user_input.get(CONF_LOGIN_METHOD),
                 CONF_LOGIN_OVERRIDE: user_input.get(CONF_LOGIN_OVERRIDE),
+                CONF_SERIAL_NUMBER: None
             }
             api = await get_api(self.hass, **self.config)
             
             response = api.get('/reporting/system')
-            desc = "SonicWall "+response.json()['model']+" "+response.json()['serial_number']
+            desc = "SonicWall "+response.json()['model']+" "+response.json()[CONF_SERIAL_NUMBER]
+            self.config[CONF_SERIAL_NUMBER] = response.json()[CONF_SERIAL_NUMBER]
 
             data = {CONF_API: self.config}
             return self.async_create_entry(title=desc, data=data)

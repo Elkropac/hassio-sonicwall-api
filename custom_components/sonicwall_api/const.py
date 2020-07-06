@@ -10,4 +10,7 @@ CONF_PASSWORD_RO = 'password_ro'
 CONF_PASSWORD_RW = 'password_rw'
 CONF_DEVICE_TRACKER_INTERFACES = 'device_tracker_interfaces'
 CONF_LOGIN_METHOD = 'login_method'
+CONF_LOGIN_METHOD_OPTIONS = ['basic', 'digest', 'chap']
 CONF_LOGIN_OVERRIDE = 'login_override'
+
+ATTR_MANUFACTURER = 'SonicWall'

@@ -2,7 +2,7 @@
   "domain": "sonicwall_api",
   "name": "Sonicwall",
   "config_flow": true,
-  "documentation": "https://www.home-assistant.io/components/unifi_direct",
+  "documentation": "https://github.com/Elkropac/hassio-sonicwall-api",
   "requirements": [],
   "dependencies": [],
   "codeowners": []

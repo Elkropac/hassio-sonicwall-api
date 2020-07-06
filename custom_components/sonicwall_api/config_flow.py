@@ -15,6 +15,7 @@ from homeassistant.const import (
 from .const import (
     CONF_API,
     CONF_LOGIN_METHOD,
+    CONF_LOGIN_METHOD_OPTIONS,
     CONF_LOGIN_OVERRIDE,
     CONF_PASSWORD_RO,
     CONF_PASSWORD_RW,
@@ -47,9 +48,6 @@ class SonicwallConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             api = await get_api(self.hass, **self.config)
             
             response = api.get('/reporting/system')
-            print(response.json())
-            
-            self.config[CONF_SERIAL_NUMBER] = response.json()['serial_number']
             desc = "SonicWall "+response.json()['model']+" "+response.json()['serial_number']
 
             data = {CONF_API: self.config}
@@ -67,9 +65,6 @@ class SonicwallConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 api = await get_api(self.hass, **self.config)
                 
                 response = api.get('/reporting/system')
-                print(response.json())
-                
-                self.config[CONF_SERIAL_NUMBER] = response.json()['serial_number']
                 desc = "SonicWall "+response.json()['model']+" "+response.json()['serial_number']
 
                 data = {CONF_API: self.config}
@@ -97,7 +92,7 @@ class SonicwallConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_URL, default=DEFAULT_URL): str,
                     vol.Required(CONF_USERNAME_RW): str,
                     vol.Required(CONF_PASSWORD_RW): str,
-                    vol.Required(CONF_LOGIN_METHOD, default=DEFAULT_LOGIN_METHOD): vol.In(['basic', 'digest']),
+                    vol.Required(CONF_LOGIN_METHOD, default=DEFAULT_LOGIN_METHOD): vol.In(CONF_LOGIN_METHOD_OPTIONS),
                     vol.Optional(CONF_LOGIN_OVERRIDE, default=DEFAULT_LOGIN_OVERRIDE): bool,
                     vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): bool,
                 }
